@@ -30,7 +30,24 @@ private ResultRepository resultRepository;
     }
 
     @Override
-    public void deleteResultById(Long id) {
+    public boolean deleteResultById(Long id) {
+        try {
+            resultRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            // Handle any exceptions or errors here
+            return false; // Return false if deletion fails
+        }
+    }
 
+    @Override
+    public boolean delete(Result result) {
+        try {
+            resultRepository.delete(result);
+            return true;
+        } catch (Exception e) {
+            // Handle any exceptions or errors here
+            return false; // Return false if deletion fails
+        }
     }
 }

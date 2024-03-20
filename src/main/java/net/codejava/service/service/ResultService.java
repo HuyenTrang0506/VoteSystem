@@ -7,7 +7,8 @@ public interface ResultService {
 
     Result findResultById(Long id);
     Result update(Result result);
-    void deleteResultById(Long id);
+    boolean deleteResultById(Long id);
+    boolean delete(Result result);
 
 
 
