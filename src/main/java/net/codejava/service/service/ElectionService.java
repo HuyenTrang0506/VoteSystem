@@ -16,4 +16,5 @@ public interface ElectionService {
     List<Election> getAllElection();
 
     Boolean delete(Long id);
+
 }

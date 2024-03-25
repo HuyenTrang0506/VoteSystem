@@ -3,6 +3,7 @@ package net.codejava.service;
 import net.codejava.dto.CandidateDTO;
 import net.codejava.entity.Ballot;
 import net.codejava.entity.Candidate;
+import net.codejava.entity.Election;
 import net.codejava.repository.CandidateRepository;
 import net.codejava.service.service.CandidateService;
 import org.modelmapper.ModelMapper;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -60,5 +62,26 @@ public class CandidateServiceImpl implements CandidateService {
             // Handle any exceptions or errors here
             return false; // Return false if deletion fails
         }
+    }
+
+    @Override
+    public List<Candidate> findALLCandidateByElection(Election election) {
+            return candidateRepository.findALLCandidateByElection(election);
+
+    }
+
+    @Override
+    public List<Candidate> findALLCandidateByElectionId(Long election_id) {
+        return candidateRepository.findALLCandidateByElectionId(election_id);
+    }
+
+    @Override
+    public Candidate findCandidateByElectionAndName(Election election, String name) {
+        return candidateRepository.findCandidateByElectionAndName(election, name);
+    }
+
+    @Override
+    public Candidate findCandidateByElectionAndId(Election election, Long id) {
+        return candidateRepository.findCandidateByElectionAndId(election, id);
     }
 }

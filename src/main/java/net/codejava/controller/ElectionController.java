@@ -23,7 +23,7 @@ public class ElectionController {
      List<Election> elections= electionService.getAllElection();
         return ResponseEntity.ok(elections);
     }
-    @GetMapping("/elections/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Election> getElectionById(@PathVariable Long id) {
         Election election = electionService.findElectionById(id);
         return ResponseEntity.ok(election);
@@ -34,5 +34,6 @@ public class ElectionController {
           return ResponseEntity.status(HttpStatus.CREATED).body(createdElection);
 
     }
+
 
 }

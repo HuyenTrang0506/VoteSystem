@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -59,5 +60,10 @@ public class BallotServiceImpl implements BallotService {
             // Handle any exceptions or errors here
             return false; // Return false if deletion fails
         }
+    }
+
+    @Override
+    public List<Ballot> findAllBallotByElection(Election election) {
+        return ballotRepository.findAllByElection(election);
     }
 }
