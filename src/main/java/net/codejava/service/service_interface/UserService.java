@@ -1,5 +1,6 @@
 package net.codejava.service.service_interface;
 
+import net.codejava.dto.AuthRequest;
 import net.codejava.entity.User;
 
 
@@ -22,4 +23,5 @@ public interface UserService {
     User findUserByEmail(String email);
 
 
+    User registerUser(AuthRequest authRequest);
 }

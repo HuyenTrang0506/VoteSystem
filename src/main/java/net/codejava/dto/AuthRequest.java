@@ -16,10 +16,12 @@ public class AuthRequest {
     @Email
     @Length(min = 5, max = 50)
     private String email;
-
+    private String fullname;
     @NotNull
-    @Length(min = 5, max = 10)
+    @Length(min = 5, max = 50)
     private String password;
+    @NotNull
+
 
     public AuthRequest() {
 
@@ -27,22 +29,6 @@ public class AuthRequest {
 
     public AuthRequest(String email, String password) {
         this.email = email;
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
     }
 

@@ -1,5 +1,6 @@
 package net.codejava.service;
 
+import net.codejava.dto.AuthRequest;
 import net.codejava.entity.Role;
 import net.codejava.entity.User;
 
@@ -29,10 +30,28 @@ public class UserServiceImpl implements UserService {
     private JavaMailSender javaMailSender;
 
     @Override
+    public User registerUser(AuthRequest authRequest) {
+        User user = new User();
+        //email
+        user.setEmail(authRequest.getEmail());
+        //fullname
+        user.setFullname(authRequest.getFullname());
+        //add role for user
+        Set<Role> roles = new HashSet<>();
+        roles.add(new Role(2, "ROLE_USER"));
+        user.setRoles(roles);
+        //password
+        String rawPassword = authRequest.getPassword();
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+        user.setPassword(encodedPassword);
+        return repo.save(user);
+    }
 
+
+    @Override
     public User save(User user) {
         Set<Role> roles = new HashSet<>();
-        roles.add(new Role(1));
+        roles.add(new Role(2));
         user.setRoles(roles);
         String rawPassword = user.getPassword();
         String encodedPassword = passwordEncoder.encode(rawPassword);
@@ -61,7 +80,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User forgotPassword(String email) {
-    String otp = generateOTP();
+        String otp = generateOTP();
 
         Optional<User> user = repo.findByEmail(email);
         String encodedPassword = passwordEncoder.encode(otp);
@@ -69,8 +88,8 @@ public class UserServiceImpl implements UserService {
         if (user.isPresent()) {
             User existingUser = user.get();
             existingUser.setPassword(encodedPassword);
-            sendEmail(email,"Your new password is: ",otp);
-            System.out.println("Your new password is "+otp);
+            sendEmail(email, "Your new password is: ", otp);
+            System.out.println("Your new password is " + otp);
             return repo.save(existingUser);
         } else {
             throw new NoSuchElementException("User not found with email: " + email);
@@ -116,7 +135,6 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-
     @Override
     public Boolean sendEmail(String to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -129,7 +147,8 @@ public class UserServiceImpl implements UserService {
         System.out.println("Send mail successfully");
         return true;
     }
-    public  String generateOTP() {
+
+    public String generateOTP() {
         // Tạo một chuỗi ngẫu nhiên
         String randomString = "your-random-string"; // Thay thế bằng chuỗi ngẫu nhiên thực tế
 

@@ -2,12 +2,12 @@ package net.codejava.controller;
 
 import net.codejava.dto.AuthRequest;
 import net.codejava.dto.AuthResponse;
-import net.codejava.dto.UserDto;
 import net.codejava.entity.User;
+import net.codejava.exception_handler.CustomErrorResponse;
 import net.codejava.jwt.JwtTokenUtil;
-import net.codejava.service.UserServiceImpl;
 import net.codejava.service.service_interface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.security.Principal;
+import java.time.LocalDateTime;
 
 
 @RestController
@@ -30,17 +31,28 @@ public class AuthController {
     AuthenticationManager authManager;
     @Autowired
     JwtTokenUtil jwtUtil;
-    @Autowired
-    private UserServiceImpl service;
+
     @Autowired
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(@RequestBody @Valid User user) {
-        User createdUser = service.save(user);
-        URI uri = URI.create("/users/" + createdUser.getId());
-        UserDto userDto = new UserDto(createdUser.getId(), createdUser.getEmail());
-        return ResponseEntity.created(uri).body(userDto);
+    public ResponseEntity<?> createUser(@RequestBody @Valid  AuthRequest authRequest) {
+
+        try {
+            User createdUser = userService.registerUser(authRequest);
+            AuthResponse authResponse = new AuthResponse(createdUser.getId(), createdUser.getEmail(), null, createdUser.getRoles(), createdUser.getFullname());
+            return ResponseEntity.ok(authResponse);
+        } catch (DataIntegrityViolationException ex) {
+            // Xử lý ngoại lệ nếu email đã tồn tại trong cơ sở dữ liệu
+            CustomErrorResponse response = new CustomErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), "Email is already taken ", "/auth/register");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(response);
+        } catch (Exception ex) {
+            // Xử lý các ngoại lệ khác mà không phải là do email trùng lặp
+            CustomErrorResponse response = new CustomErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), "Error when create new user: " + ex.getMessage(), "/auth/register");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+        }
     }
 
     // Get current user is active
@@ -61,7 +73,7 @@ public class AuthController {
 
             User user = (User) authentication.getPrincipal();
             String accessToken = jwtUtil.generateAccessToken(user);
-            AuthResponse response = new AuthResponse(user.getEmail(), accessToken, user.getRoles().toString(), user.getFullname());
+            AuthResponse response = new AuthResponse(user.getId(),user.getEmail(), accessToken, user.getRoles(), user.getFullname());
 
             return ResponseEntity.ok().body(response);
 

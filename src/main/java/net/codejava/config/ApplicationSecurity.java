@@ -86,4 +86,3 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 }
-//                .antMatchers("/auth/**", "/enroll/**","/users/pro-email").permitAll()

@@ -7,6 +7,8 @@ import net.codejava.service.service_interface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 
 @SpringBootApplication
 public class VotingSystem {
@@ -20,11 +22,12 @@ public class VotingSystem {
     public static void main(String[] args) {
         SpringApplication.run(VotingSystem.class, args);
     }
-
-    public void run(String... args) throws Exception {
-        roleRepository.save(new Role("ROLE_ADMIN"));
-       roleRepository.save(new Role("ROLE_USER"));
-
+@Bean
+    public void init() {
+        Role admin = new Role("ROLE_ADMIN");
+        Role user = new Role("ROLE_USER");
+        roleRepository.save(admin);
+        roleRepository.save(user);
     }
 
 
