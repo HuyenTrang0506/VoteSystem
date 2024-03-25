@@ -25,13 +25,13 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String fullname;
-
     @Column(nullable = false, length = 50, unique = true)
     @Email
     @Length(min = 5, max = 50)
     private String email;
+
+    @Column(nullable = true)
+    private String fullname;
 
     @Column(nullable = false, length = 64)
     @Length(min = 5, max = 64)
@@ -57,15 +57,6 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    @JsonIgnore
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -75,11 +66,11 @@ public class User implements UserDetails {
         return authorities;
     }
 
-
     @Override
     public String getUsername() {
         return this.email;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {
@@ -99,15 +90,6 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 
     public void addRole(Role role) {

@@ -22,13 +22,14 @@ public class VotingSystem {
     public static void main(String[] args) {
         SpringApplication.run(VotingSystem.class, args);
     }
-@Bean
-    public void init() {
-        Role admin = new Role("ROLE_ADMIN");
-        Role user = new Role("ROLE_USER");
-        roleRepository.save(admin);
-        roleRepository.save(user);
-    }
+    //run only once
+//@Bean
+//    public void init() {
+//        Role admin = new Role("ROLE_ADMIN");
+//        Role user = new Role("ROLE_USER");
+//        roleRepository.save(admin);
+//        roleRepository.save(user);
+//    }
 
 
 }
