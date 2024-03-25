@@ -13,5 +13,7 @@ import java.util.List;
 public interface BallotRepository extends JpaRepository<Ballot, Long> {
 
 
-    List<Ballot> findByElectionId(Long electionId);
+    List<Ballot> findAllByElection(Election election);
+    List<Ballot> findAllByElectionId(Long electionId);
+
 }

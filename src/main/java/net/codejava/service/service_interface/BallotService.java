@@ -1,8 +1,7 @@
-package net.codejava.service.service;
+package net.codejava.service.service_interface;
 
 import net.codejava.dto.BallotDTO;
 import net.codejava.entity.Ballot;
-import net.codejava.entity.Candidate;
 import net.codejava.entity.Election;
 
 import java.util.List;

@@ -1,16 +1,12 @@
 package net.codejava.controller;
 
-import net.codejava.dto.BallotDTO;
 import net.codejava.dto.ResultDTO;
-import net.codejava.entity.Ballot;
 import net.codejava.entity.Result;
-import net.codejava.service.service.ResultService;
+import net.codejava.service.service_interface.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/results")

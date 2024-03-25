@@ -4,7 +4,7 @@ import net.codejava.dto.BallotDTO;
 import net.codejava.entity.Ballot;
 import net.codejava.entity.Election;
 import net.codejava.repository.BallotRepository;
-import net.codejava.service.service.BallotService;
+import net.codejava.service.service_interface.BallotService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,5 +65,10 @@ public class BallotServiceImpl implements BallotService {
     @Override
     public List<Ballot> findAllBallotByElection(Election election) {
         return ballotRepository.findAllByElection(election);
+    }
+
+    @Override
+    public List<Ballot> findBallotByElectionId(Long election_id) {
+        return ballotRepository.findAllByElectionId(election_id);
     }
 }

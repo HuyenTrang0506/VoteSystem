@@ -6,7 +6,7 @@ import net.codejava.dto.UserDto;
 import net.codejava.entity.User;
 import net.codejava.jwt.JwtTokenUtil;
 import net.codejava.service.UserServiceImpl;
-import net.codejava.service.service.UserService;
+import net.codejava.service.service_interface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

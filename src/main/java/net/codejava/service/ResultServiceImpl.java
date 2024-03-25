@@ -1,12 +1,9 @@
 package net.codejava.service;
 
 import net.codejava.dto.ResultDTO;
-import net.codejava.entity.Candidate;
-import net.codejava.entity.Election;
 import net.codejava.entity.Result;
 import net.codejava.repository.ResultRepository;
-import net.codejava.repository.UserRepository;
-import net.codejava.service.service.ResultService;
+import net.codejava.service.service_interface.ResultService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

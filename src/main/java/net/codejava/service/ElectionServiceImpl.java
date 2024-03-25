@@ -3,7 +3,7 @@ package net.codejava.service;
 import net.codejava.dto.ElectionDTO;
 import net.codejava.entity.Election;
 import net.codejava.repository.ElectionRepository;
-import net.codejava.service.service.ElectionService;
+import net.codejava.service.service_interface.ElectionService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

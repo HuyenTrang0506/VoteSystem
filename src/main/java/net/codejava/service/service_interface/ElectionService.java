@@ -1,4 +1,4 @@
-package net.codejava.service.service;
+package net.codejava.service.service_interface;
 
 import net.codejava.dto.ElectionDTO;
 import net.codejava.entity.Election;

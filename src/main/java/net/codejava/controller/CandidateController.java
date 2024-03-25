@@ -1,11 +1,8 @@
 package net.codejava.controller;
 
 import net.codejava.dto.CandidateDTO;
-import net.codejava.dto.ElectionDTO;
 import net.codejava.entity.Candidate;
-import net.codejava.entity.Election;
-import net.codejava.service.service.BallotService;
-import net.codejava.service.service.CandidateService;
+import net.codejava.service.service_interface.CandidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

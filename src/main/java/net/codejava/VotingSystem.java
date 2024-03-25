@@ -3,7 +3,7 @@ package net.codejava;
 import net.codejava.entity.Role;
 import net.codejava.repository.RoleRepository;
 import net.codejava.repository.UserRepository;
-import net.codejava.service.service.UserService;
+import net.codejava.service.service_interface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

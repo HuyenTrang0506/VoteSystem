@@ -1,11 +1,10 @@
 package net.codejava.service;
 
 import net.codejava.dto.CandidateDTO;
-import net.codejava.entity.Ballot;
 import net.codejava.entity.Candidate;
 import net.codejava.entity.Election;
 import net.codejava.repository.CandidateRepository;
-import net.codejava.service.service.CandidateService;
+import net.codejava.service.service_interface.CandidateService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

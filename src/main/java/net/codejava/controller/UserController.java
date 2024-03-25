@@ -3,7 +3,7 @@ package net.codejava.controller;
 import net.codejava.dto.modifyUser.ChangeAvatarDTO;
 import net.codejava.dto.modifyUser.ChangePasswordDTO;
 import net.codejava.entity.User;
-import net.codejava.service.service.UserService;
+import net.codejava.service.service_interface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
