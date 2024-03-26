@@ -78,7 +78,8 @@ public class AuthController {
             return ResponseEntity.ok().body(response);
 
         } catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            CustomErrorResponse response = new CustomErrorResponse(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(), "Login error, please try again!" , "/auth/login");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
 

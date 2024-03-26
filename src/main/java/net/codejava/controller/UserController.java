@@ -20,20 +20,20 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RolesAllowed("ADMIN")
+//    @RolesAllowed("ADMIN")
     @GetMapping()
     public ResponseEntity<Object> getAllUser() {
         List<User> users = userService.getAllUser();
         return ResponseEntity.ok(users);
     }
-    @RolesAllowed("USER")
+//    @RolesAllowed("USER")
     @PatchMapping("/password")
     public ResponseEntity<User> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO, Principal principal) {
         User user = userService.changePassword(changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword(), principal);
         return ResponseEntity.ok(user);
     }
 
-    @RolesAllowed("USER")
+//    @RolesAllowed("USER")
     @PatchMapping("/avatar")
     public ResponseEntity<User> changeAvatar(@RequestBody ChangeAvatarDTO changeAvatarDTO, Principal principal) {
         return ResponseEntity.ok(userService.changeAvatar(changeAvatarDTO.getUrl(), principal));
