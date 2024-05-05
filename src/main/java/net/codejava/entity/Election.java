@@ -31,13 +31,10 @@ public class Election {
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_election",
-            joinColumns = @JoinColumn(name = "election_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<User> users = new HashSet<>();
+
+    //now join table is voter, fix my code
+    @OneToMany(mappedBy = "election")
+    private List<Voter> listVoters;
 
     //fix this code bellow
     @OneToMany(mappedBy = "election")

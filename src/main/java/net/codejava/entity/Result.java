@@ -2,7 +2,7 @@ package net.codejava.entity;
 import lombok.*;
 
 import javax.persistence.*;
-
+// this class stores the results of an election
 @Entity
 @Table(name = "results")
 @Getter

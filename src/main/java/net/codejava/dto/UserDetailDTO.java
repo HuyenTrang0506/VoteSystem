@@ -15,7 +15,7 @@ public class UserDetailDTO {
     private String email;
     private byte[] avatarUrl;
     private Set<String> roles; // Assuming roles are represented as strings
-
+    private Set<Long> electionIds; // Assuming election ids are represented as longs
     // Constructors, getters, setters
 
 

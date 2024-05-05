@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
+//this class specifies the roles that can be assigned to users in the system
 @Entity
 @Getter
 @Setter

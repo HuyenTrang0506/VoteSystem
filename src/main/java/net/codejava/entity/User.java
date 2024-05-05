@@ -50,8 +50,9 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
-    @ManyToMany(mappedBy = "users")
-    private Set<Election> elections = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Voter> voters = new HashSet<>();
     public User(String email, String password) {
         this.email = email;
         this.password = password;
