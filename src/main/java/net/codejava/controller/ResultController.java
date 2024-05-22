@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/results")
 public class ResultController {
-    @Autowired
-    private ResultService resultService;
+    private final ResultService resultService;
+@Autowired
+    public ResultController(ResultService resultService) {
+        this.resultService = resultService;
+    }
+
     @PostMapping
     public ResponseEntity<Result> saveResult(@RequestBody ResultDTO resultDTO) {
         Result result = resultService.save(resultDTO);

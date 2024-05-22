@@ -13,9 +13,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/elections")
 public class ElectionController {
-    @Autowired
-    private ElectionService electionService;
-
+    private final ElectionService electionService;
+    public ElectionController(ElectionService electionService) {
+        this.electionService = electionService;
+    }
     @GetMapping()
     public ResponseEntity<Object> getAllElection() {
         List<Election> elections = electionService.getAllElection();

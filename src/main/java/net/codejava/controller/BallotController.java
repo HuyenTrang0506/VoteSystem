@@ -14,8 +14,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/ballots")
 public class BallotController {
+    private final BallotService ballotService;
     @Autowired
-    private BallotService ballotService;
+    public BallotController(BallotService ballotService) {
+        this.ballotService = ballotService;
+    }
     @GetMapping("/election/{election_id}")
     public ResponseEntity<Object> getAllBallotByElectionId(@PathVariable Long election_id) {
         List<Ballot> ballots= ballotService.findBallotByElectionId(election_id);

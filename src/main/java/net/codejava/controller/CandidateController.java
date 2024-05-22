@@ -13,8 +13,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/candidates")
 public class CandidateController {
+    private final CandidateService candidateService;
     @Autowired
-    private CandidateService candidateService;
+    public CandidateController(CandidateService candidateService) {
+        this.candidateService = candidateService;
+    }
     @PostMapping
     public ResponseEntity<Candidate> saveCandidate(@RequestBody CandidateDTO candidateDTO) {
         Candidate candidate = candidateService.save(candidateDTO);

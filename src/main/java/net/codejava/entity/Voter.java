@@ -13,7 +13,7 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-
+@EqualsAndHashCode
 public class Voter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,6 +3,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.codejava.entity.Voter;
 
 import java.util.Set;
 @Setter
@@ -15,7 +16,7 @@ public class UserDetailDTO {
     private String email;
     private byte[] avatarUrl;
     private Set<String> roles; // Assuming roles are represented as strings
-    private Set<Long> electionIds; // Assuming election ids are represented as longs
+    private Set<Voter> voters;
     // Constructors, getters, setters
 
 

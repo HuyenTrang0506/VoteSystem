@@ -1,9 +1,11 @@
 package net.codejava.service;
 
 import net.codejava.dto.AuthRequest;
+import net.codejava.dto.UserDetailDTO;
 import net.codejava.entity.Role;
 import net.codejava.entity.User;
 
+import net.codejava.entity.Voter;
 import net.codejava.repository.RoleRepository;
 import net.codejava.repository.UserRepository;
 import net.codejava.service.service_interface.UserService;
@@ -21,6 +23,7 @@ import javax.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -64,6 +67,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userrepo.save(user);
     }
 
+    public List<UserDetailDTO> getAllUser() {
+        List<User> users = userrepo.findAll();
+        return users.stream()
+                .map(user -> new UserDetailDTO(user.getId(), user.getFullname(), user.getEmail(), user.getAvatarUrl(), user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()), user.getVoters()))
+                .collect(Collectors.toList());
+    }
 
     @Override
     public User changePassword(String oldPassword, String password, Principal principal) {
@@ -125,10 +134,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
     }
 
-    @Override
-    public List<User> getAllUser() {
-        return userrepo.findAll();
-    }
 
     @Override
     public User findUserByEmail(String email) {

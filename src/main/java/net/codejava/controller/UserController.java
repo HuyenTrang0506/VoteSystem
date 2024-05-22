@@ -1,18 +1,17 @@
 package net.codejava.controller;
 
+import net.codejava.dto.UserDetailDTO;
 import net.codejava.dto.modifyUser.ChangeAvatarDTO;
 import net.codejava.dto.modifyUser.ChangePasswordDTO;
 import net.codejava.entity.User;
 import net.codejava.service.service_interface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import java.security.Principal;
 import java.util.List;
 
@@ -20,15 +19,17 @@ import java.util.List;
 @RequestMapping("/users")
 @CrossOrigin
 public class UserController {
+    private final UserService userService;
     @Autowired
-    private UserService userService;
-
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping()
     public ResponseEntity<Object> getAllUser() {
 
-        List<User> users = userService.getAllUser();
+        List<UserDetailDTO> users = userService.getAllUser();
         return ResponseEntity.ok(users);
     }
 //    @RolesAllowed("USER")

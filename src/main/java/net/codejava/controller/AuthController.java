@@ -29,15 +29,15 @@ import java.util.Collection;
 @RequestMapping("/auth")
 
 public class AuthController {
-
+    private final UserService userService;
+    private final JwtTokenUtil jwtUtil;
+    private final AuthenticationManager authManager;
     @Autowired
-    AuthenticationManager authManager;
-    @Autowired
-    JwtTokenUtil jwtUtil;
-
-    @Autowired
-    private UserService userService;
-
+    public AuthController(UserService userService, JwtTokenUtil jwtUtil, AuthenticationManager authManager) {
+        this.userService = userService;
+        this.jwtUtil = jwtUtil;
+        this.authManager = authManager;
+    }
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@RequestBody @Valid  AuthRequest authRequest) {
 
