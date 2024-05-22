@@ -6,6 +6,10 @@ import net.codejava.entity.User;
 import net.codejava.service.service_interface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -14,15 +18,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-
 @CrossOrigin
 public class UserController {
     @Autowired
     private UserService userService;
 
-//    @RolesAllowed("ADMIN")
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping()
     public ResponseEntity<Object> getAllUser() {
+
         List<User> users = userService.getAllUser();
         return ResponseEntity.ok(users);
     }

@@ -4,12 +4,16 @@ import net.codejava.dto.AuthRequest;
 import net.codejava.entity.Role;
 import net.codejava.entity.User;
 
+import net.codejava.repository.RoleRepository;
 import net.codejava.repository.UserRepository;
 import net.codejava.service.service_interface.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,15 +24,16 @@ import java.util.*;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
-    private UserRepository repo;
+    private UserRepository userrepo;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private JavaMailSender javaMailSender;
-
+    @Autowired
+    private RoleRepository roleRepository;
     @Override
     public User registerUser(AuthRequest authRequest) {
         User user = new User();
@@ -38,32 +43,32 @@ public class UserServiceImpl implements UserService {
         user.setFullname(authRequest.getFullname());
         //add role for user
         Set<Role> roles = new HashSet<>();
-        roles.add(new Role(2, "ROLE_USER"));
+        roles.add(roleRepository.findByName("ROLE_USER"));
         user.setRoles(roles);
         //password
         String rawPassword = authRequest.getPassword();
         String encodedPassword = passwordEncoder.encode(rawPassword);
         user.setPassword(encodedPassword);
-        return repo.save(user);
+        return userrepo.save(user);
     }
 
 
     @Override
     public User save(User user) {
         Set<Role> roles = new HashSet<>();
-        roles.add(new Role(2));
+        roles.add(roleRepository.findByName("ROLE_USER"));
         user.setRoles(roles);
         String rawPassword = user.getPassword();
         String encodedPassword = passwordEncoder.encode(rawPassword);
         user.setPassword(encodedPassword);
-        return repo.save(user);
+        return userrepo.save(user);
     }
 
 
     @Override
     public User changePassword(String oldPassword, String password, Principal principal) {
         String email = principal.getName();
-        Optional<User> user = repo.findByEmail(email);
+        Optional<User> user = userrepo.findByEmail(email);
         String encodedPassword = passwordEncoder.encode(password);
 
         if (user.isPresent()) {
@@ -72,7 +77,7 @@ public class UserServiceImpl implements UserService {
                 throw new NoSuchElementException("Wrong password");
             }
             existingUser.setPassword(encodedPassword);
-            return repo.save(existingUser);
+            return userrepo.save(existingUser);
         } else {
             throw new NoSuchElementException("User not found with email: " + email);
         }
@@ -82,7 +87,7 @@ public class UserServiceImpl implements UserService {
     public User forgotPassword(String email) {
         String otp = generateOTP();
 
-        Optional<User> user = repo.findByEmail(email);
+        Optional<User> user = userrepo.findByEmail(email);
         String encodedPassword = passwordEncoder.encode(otp);
 
         if (user.isPresent()) {
@@ -90,7 +95,7 @@ public class UserServiceImpl implements UserService {
             existingUser.setPassword(encodedPassword);
             sendEmail(email, "Your new password is: ", otp);
             System.out.println("Your new password is " + otp);
-            return repo.save(existingUser);
+            return userrepo.save(existingUser);
         } else {
             throw new NoSuchElementException("User not found with email: " + email);
         }
@@ -99,12 +104,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User changeAvatar(String url, Principal principal) {
         String email = principal.getName();
-        Optional<User> user = repo.findByEmail(email);
+        Optional<User> user = userrepo.findByEmail(email);
         if (user.isPresent()) {
             User existingUser = user.get();
             byte[] avatarBytes = url.getBytes(StandardCharsets.UTF_8); // Convert String to byte[]
             existingUser.setAvatarUrl(avatarBytes);
-            return repo.save(existingUser);
+            return userrepo.save(existingUser);
         } else {
             throw new NoSuchElementException("User not found with email: " + email);
         }
@@ -113,7 +118,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean delete(User user) {
         try {
-            repo.delete(user);
+            userrepo.delete(user);
             return true;
         } catch (Exception e) {
             return false;
@@ -122,12 +127,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUser() {
-        return repo.findAll();
+        return userrepo.findAll();
     }
 
     @Override
     public User findUserByEmail(String email) {
-        Optional<User> u = repo.findByEmail(email);
+        Optional<User> u = userrepo.findByEmail(email);
         User user = null;
         if (u.isPresent()) {
             user = u.get();
@@ -159,5 +164,12 @@ public class UserServiceImpl implements UserService {
         otp = otp.substring(0, 6);
 
         return otp;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userrepo.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        return user;
     }
 }

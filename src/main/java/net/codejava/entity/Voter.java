@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 //join table between user and election
 @Entity
@@ -27,12 +28,8 @@ public class Voter {
     @JoinColumn(name = "election_id", nullable = false)
     private Election election;
 
-    @ManyToMany
-    @JoinTable(
-            name = "voter_permissions",
-            joinColumns = @JoinColumn(name = "voter_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
+    @OneToMany
+    @JoinColumn(name = "voter_id")
     private Set<Permission> permissions = new HashSet<>();
 
 

@@ -17,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
 
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
@@ -69,25 +68,26 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     }
 
     private UserDetails getUserDetails(String token) {
+
+        User userDetails = new User();
         Claims claims = jwtUtil.parseClaims(token);
-        String subject = claims.getSubject();
+        String subject = (String) claims.get(Claims.SUBJECT);
         String roles = (String) claims.get("roles");
 
-        // Split roles and convert to List
-        List<String> roleList = Arrays.asList(roles.split(","));
+        System.out.println("SUBJECT: " + subject);
+        System.out.println("roles: " + roles);
+        roles = roles.replace("[", "").replace("]", "");
+        String[] roleNames = roles.split(",");
 
-        // Create a new User object
-        User userDetails = new User();
-        userDetails.setEmail(subject);
-
-        // Populate roles for the user
-        Set<Role> userRoles = new HashSet<>();
-        for (String roleName : roleList) {
-            userRoles.add(new Role(roleName.trim())); // Assuming Role constructor accepts role name
+        for (String aRoleName : roleNames) {
+            userDetails.addRole(new Role(aRoleName));
         }
-        userDetails.setRoles(userRoles);
+
+        String[] jwtSubject = subject.split(",");
+
+        userDetails.setId(Long.parseLong(jwtSubject[0]));
+        userDetails.setEmail(jwtSubject[1]);
 
         return userDetails;
     }
-
 }

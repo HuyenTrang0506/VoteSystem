@@ -14,12 +14,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URI;
+
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 
 @RestController
@@ -70,11 +73,29 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(
                             request.getEmail(), request.getPassword())
             );
-
             User user = (User) authentication.getPrincipal();
             String accessToken = jwtUtil.generateAccessToken(user);
-            AuthResponse response = new AuthResponse(user.getId(),user.getEmail(), accessToken, user.getRoles(), user.getFullname());
+            AuthResponse response = new AuthResponse(user.getId(), user.getEmail(), accessToken, user.getRoles(), user.getFullname());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            //check auth in security context
+           Authentication authcheck= SecurityContextHolder.getContext().getAuthentication();
 
+            if (authcheck != null && authcheck.isAuthenticated()) {
+                Collection<? extends GrantedAuthority> authorities = authcheck.getAuthorities();
+
+                // Check for specific roles
+                for (GrantedAuthority authority : authorities) {
+                    if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                        // User has the ROLE_ADMIN role
+                        // Perform actions specific to users with this role
+                        System.out.println("User has the ROLE_ADMIN role");
+                    } else if (authority.getAuthority().equals("ROLE_USER")) {
+                        // User has the ROLE_USER role
+                        // Perform actions specific to users with this role
+                        System.out.println("User has the ROLE_USER role");
+                    }
+                }
+            }
             return ResponseEntity.ok().body(response);
 
         } catch (BadCredentialsException ex) {
