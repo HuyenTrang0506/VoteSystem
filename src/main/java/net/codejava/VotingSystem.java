@@ -1,6 +1,8 @@
 package net.codejava;
 
+import net.codejava.entity.Permission;
 import net.codejava.entity.Role;
+import net.codejava.repository.PermissionRepository;
 import net.codejava.repository.RoleRepository;
 import net.codejava.repository.UserRepository;
 import net.codejava.service.service_interface.UserService;
@@ -17,19 +19,32 @@ public class VotingSystem {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private PermissionRepository permissionRepository;
+    @Autowired
     private UserService userService;
 
     public static void main(String[] args) {
         SpringApplication.run(VotingSystem.class, args);
     }
-    //run only once
-//@Bean
-//    public void init() {
-//        Role admin = new Role("ROLE_ADMIN");
-//        Role user = new Role("ROLE_USER");
-//        roleRepository.save(admin);
-//        roleRepository.save(user);
-//    }
+    //run this code bellow only once when you run this application first time
+
+/*
+    @Bean
+        public void init() {
+            Role admin = new Role("ROLE_ADMIN");
+            Role user = new Role("ROLE_USER");
+            roleRepository.save(admin);
+            roleRepository.save(user);
+            Permission p1 = new Permission("VIEW PROGRESS");
+            Permission p2 = new Permission("TERMINATE VOTING");
+            Permission p3 = new Permission("VOTER MANAGEMENT");
+            Permission p4 = new Permission("CANDIDATE MANAGEMENT");
+            permissionRepository.save(p1);
+            permissionRepository.save(p2);
+            permissionRepository.save(p3);
+            permissionRepository.save(p4);
+        }
+*/
 
 
 }

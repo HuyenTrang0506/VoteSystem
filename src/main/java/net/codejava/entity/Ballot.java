@@ -30,6 +30,7 @@ public class Ballot {
     private Candidate candidate;
 
     @Column(name = "is_blank")
-    private boolean isBlank;
+    private boolean isBlank=false;
+
 
 }

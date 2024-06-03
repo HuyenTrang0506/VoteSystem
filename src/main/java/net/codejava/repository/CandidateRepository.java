@@ -9,11 +9,6 @@ import java.util.List;
 
 @Repository
 public interface CandidateRepository extends JpaRepository<Candidate, Long> {
-    List<Candidate> findALLCandidateByElection(Election election);
-    List<Candidate> findALLCandidateByElectionId(Long election_id);
 
 
-    Candidate findCandidateByElectionAndName(Election election, String name);
-
-    Candidate findCandidateByElectionAndId(Election election, Long id);
 }

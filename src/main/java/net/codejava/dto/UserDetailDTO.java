@@ -17,6 +17,7 @@ public class UserDetailDTO {
     private byte[] avatarUrl;
     private Set<String> roles; // Assuming roles are represented as strings
     private Set<Voter> voters;
+    //i want to have set of election id only=)))))))))))))))))))
     // Constructors, getters, setters
 
 

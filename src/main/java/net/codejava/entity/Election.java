@@ -2,6 +2,7 @@ package net.codejava.entity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
@@ -13,7 +14,6 @@ import lombok.*;
 @Table(name = "elections")
 @Setter
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 public class Election {
@@ -32,19 +32,73 @@ public class Election {
     private LocalDateTime endTime;
 
 
-    //now join table is voter, fix my code
-    @OneToMany(mappedBy = "election")
+
+    @OneToMany(mappedBy = "election",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Voter> listVoters;
 
-    //fix this code bellow
-    @OneToMany(mappedBy = "election")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "election_id")
     private List<Candidate> listCandidates;
 
-    @OneToMany(mappedBy = "election")
+    @OneToMany(mappedBy = "election", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ballot> listBallots;
-    @OneToOne(mappedBy = "election")
+    @OneToOne(mappedBy = "election", cascade = CascadeType.ALL, orphanRemoval = true)
     private Result result;
+    //constructors
+    public Election(String title, String description, LocalDateTime startTime, LocalDateTime endTime, List<Voter> listVoters, List<Candidate> listCandidates, List<Ballot> listBallots, Result result) {
+        this.title = title;
+        this.description = description;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.listVoters = listVoters;
+        this.listCandidates = listCandidates;
+        this.listBallots = listBallots;
+        this.result = result;
+    }
+    public Election(String title, String description, LocalDateTime startTime, LocalDateTime endTime) {
 
+        this.title = title;
+        this.description = description;
+        this.startTime = startTime;
+        this.endTime = endTime;
+         init();
+    }
+    public Election() {
+       init();
+    }
+    private void init(){
+        this.listVoters = new ArrayList<>();
+        this.listCandidates = new ArrayList<>();
+        this.listBallots = new ArrayList<>();
+        result = null;
+    }
 
+    public Long getResultId() {
+        return result.getId();
+    }
+
+    public List<Long> getVoterIds() {
+        List<Long> voterIds = new ArrayList<>();
+        for (Voter voter : listVoters) {
+            voterIds.add(voter.getId());
+        }
+        return voterIds;
+    }
+
+    public List<Long> getCandidateIds() {
+        List<Long> candidateIds = new ArrayList<>();
+        for (Candidate candidate : listCandidates) {
+            candidateIds.add(candidate.getId());
+        }
+        return candidateIds;
+    }
+
+    public List<Long> getBallotIds() {
+        List<Long> ballotIds = new ArrayList<>();
+        for (Ballot ballot : listBallots) {
+            ballotIds.add(ballot.getId());
+        }
+        return ballotIds;
+    }
 }
 

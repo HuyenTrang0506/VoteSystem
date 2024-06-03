@@ -17,10 +17,6 @@ public class Candidate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "election_id", nullable = false)
-    private Election election;
-
     @Column(name = "name")
     private String name;
 
@@ -32,6 +28,8 @@ public class Candidate {
 
     @Column(name = "contact_information")
     private String contactInformation;
-
+    private void output(){
+        System.out.println("Candidate: " + name + " " + description + " " + image + " " + contactInformation);
+    }
     // Constructors, getters, setters
 }

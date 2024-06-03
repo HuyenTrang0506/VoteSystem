@@ -11,12 +11,13 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CandidateDTO {
     private Long id;
-    private Long electionId;
     private String name;
     private String description;
-    private String image;
+    private String imageUrl;
     private String contactInformation;
 
-   
 
+    public String output() {
+        return "Candidate: " + name + " " + description + " " + imageUrl + " " + contactInformation;
+    }
 }

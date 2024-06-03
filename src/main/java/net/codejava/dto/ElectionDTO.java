@@ -6,8 +6,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -18,6 +17,9 @@ public class ElectionDTO {
     private String description;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private Set<Long> userIds;
+    private List<Long> listVoterIds;
+    private List<CandidateDTO> listCandidates;
+    private List<Long> listBallotIds;
+    private Long resultId;
 }
 

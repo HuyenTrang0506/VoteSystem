@@ -71,4 +71,14 @@ public class BallotServiceImpl implements BallotService {
     public List<Ballot> findBallotByElectionId(Long election_id) {
         return ballotRepository.findAllByElectionId(election_id);
     }
+
+    @Override
+    public List<Ballot> findAllBallot() {
+        return ballotRepository.findAll();
+    }
+
+    @Override
+    public List<Ballot> findBallotByCandidateId(Long candidate_id) {
+        return ballotRepository.findAllByCandidateId(candidate_id);
+    }
 }

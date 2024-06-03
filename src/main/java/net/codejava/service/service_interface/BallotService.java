@@ -15,5 +15,7 @@ public interface BallotService {
     boolean deleteBallotById(Long id);
     List<Ballot> findAllBallotByElection(Election election);
     List<Ballot> findBallotByElectionId(Long election_id);
+    List<Ballot> findAllBallot();
+    List<Ballot> findBallotByCandidateId(Long voter_id);
 
 }

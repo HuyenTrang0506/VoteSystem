@@ -7,7 +7,7 @@ import javax.persistence.*;
 // they are created by the admin and assigned to voters in specific elections
 // for example, those dynamic permission can have: add voter/ view progress/ manage election
 @Entity
-@Table(name = "dynamic_persissions")
+@Table(name = "persissions")
 @Setter
 @Getter
 @NoArgsConstructor
@@ -17,7 +17,7 @@ public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "name")
+    @Column(nullable = false, length = 50, unique = true)
     private String name;
 
     public Permission(String name) {
@@ -28,5 +28,8 @@ public class Permission {
     this.id = id;
     }
 
-
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

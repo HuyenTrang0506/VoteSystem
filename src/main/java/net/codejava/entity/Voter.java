@@ -27,9 +27,12 @@ public class Voter {
     @ManyToOne
     @JoinColumn(name = "election_id", nullable = false)
     private Election election;
-
-    @OneToMany
-    @JoinColumn(name = "voter_id")
+    @ManyToMany
+    @JoinTable(
+            name = "voter_permissions",
+            joinColumns = @JoinColumn(name = "voter_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
     private Set<Permission> permissions = new HashSet<>();
 
 

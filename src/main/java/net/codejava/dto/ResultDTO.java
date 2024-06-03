@@ -13,5 +13,5 @@ public class ResultDTO {
     private Long id;
     private int ballotCount;
     private int blankBallotCount;
-    private Long winnerId;
+    private Long winnerCandidate0Id;
 }
