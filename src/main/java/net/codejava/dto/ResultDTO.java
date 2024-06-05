@@ -11,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ResultDTO {
     private Long id;
+    private Long electionId;
     private int ballotCount;
     private int blankBallotCount;
     private Long winnerCandidate0Id;

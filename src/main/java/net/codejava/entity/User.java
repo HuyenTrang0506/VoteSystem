@@ -96,4 +96,22 @@ public class User implements UserDetails {
     public void addRole(Role role) {
         this.roles.add(role);
     }
+    public void addVoter(Voter voter) {
+        this.voters.add(voter);
+    }
+    public List<Long> getVoterIds(){
+        List<Long> voterIds = new ArrayList<>();
+        for (Voter voter : voters) {
+            voterIds.add(voter.getId());
+        }
+        return voterIds;
+    }
+
+    public List<Long> getElectionIdsByVoters() {
+        List<Long> electionIds = new ArrayList<>();
+        for (Voter voter : voters) {
+            electionIds.add(voter.getElection().getId());
+        }
+        return electionIds;
+    }
 }

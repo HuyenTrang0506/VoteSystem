@@ -1,6 +1,6 @@
 package net.codejava.controller;
 
-import net.codejava.dto.UserDetailDTO;
+import net.codejava.dto.UserDTO;
 import net.codejava.dto.modifyUser.ChangeAvatarDTO;
 import net.codejava.dto.modifyUser.ChangePasswordDTO;
 import net.codejava.entity.User;
@@ -25,11 +25,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping()
     public ResponseEntity<Object> getAllUser() {
 
-        List<UserDetailDTO> users = userService.getAllUser();
+        List<UserDTO> users = userService.getAllUser();
         return ResponseEntity.ok(users);
     }
 //    @RolesAllowed("USER")

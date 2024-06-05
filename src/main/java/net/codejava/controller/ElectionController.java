@@ -2,10 +2,12 @@ package net.codejava.controller;
 
 import net.codejava.dto.AuthResponse;
 import net.codejava.dto.ElectionDTO;
+import net.codejava.dto.VoterDTO;
 import net.codejava.entity.Election;
 import net.codejava.entity.User;
 import net.codejava.exception_handler.CustomErrorResponse;
 import net.codejava.service.service_interface.ElectionService;
+import net.codejava.service.service_interface.VoterService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Role;
@@ -22,11 +24,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/elections")
 public class ElectionController {
     private final ElectionService electionService;
-
-
-    public ElectionController(ElectionService electionService) {
+    private final VoterService voterService;
+    @Autowired
+    public ElectionController(ElectionService electionService,  VoterService voterService) {
         this.electionService = electionService;
-
+        this.voterService = voterService;
     }
     @GetMapping()
     public List<ElectionDTO> getAllElections() {
@@ -47,6 +49,13 @@ public class ElectionController {
         ElectionDTO electionDTO1 = electionService.save(electionDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(electionDTO1);
     }
+    //save voter with election id, user id and its permission
+    @PostMapping("/voter-permission/{id}")
+    public List<VoterDTO> saveVoterPermission(@PathVariable Long id,@RequestBody List<VoterDTO> listVoterDTO) {
+        return  voterService.saveVoterPermission(id,listVoterDTO);
+
+    }
+
 
 //
 

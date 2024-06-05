@@ -17,9 +17,6 @@ public class ElectionDTO {
     private String description;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private List<Long> listVoterIds;
     private List<CandidateDTO> listCandidates;
-    private List<Long> listBallotIds;
-    private Long resultId;
 }
 

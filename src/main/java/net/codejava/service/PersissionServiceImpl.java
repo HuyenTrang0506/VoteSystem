@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 
 @Service
 @Transactional
-public class DynamicPersissionServiceImpl {
+public class PersissionServiceImpl {
     @Autowired
     PermissionRepository permissionRepository;
 }

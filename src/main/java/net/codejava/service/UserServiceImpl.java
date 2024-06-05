@@ -1,7 +1,7 @@
 package net.codejava.service;
 
 import net.codejava.dto.AuthRequest;
-import net.codejava.dto.UserDetailDTO;
+import net.codejava.dto.UserDTO;
 import net.codejava.entity.Role;
 import net.codejava.entity.User;
 
@@ -28,15 +28,21 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService, UserDetailsService {
-    @Autowired
-    private UserRepository userrepo;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
+    private final UserRepository userrepo;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final JavaMailSender javaMailSender;
+
+    private final RoleRepository roleRepository;
     @Autowired
-    private JavaMailSender javaMailSender;
-    @Autowired
-    private RoleRepository roleRepository;
+    public UserServiceImpl(UserRepository userrepo, PasswordEncoder passwordEncoder, JavaMailSender javaMailSender, RoleRepository roleRepository) {
+        this.userrepo = userrepo;
+        this.passwordEncoder = passwordEncoder;
+        this.javaMailSender = javaMailSender;
+        this.roleRepository = roleRepository;
+    }
     @Override
     public User registerUser(AuthRequest authRequest) {
         User user = new User();
@@ -67,10 +73,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userrepo.save(user);
     }
 
-    public List<UserDetailDTO> getAllUser() {
+    public List<UserDTO> getAllUser() {
         List<User> users = userrepo.findAll();
         return users.stream()
-                .map(user -> new UserDetailDTO(user.getId(), user.getFullname(), user.getEmail(), user.getAvatarUrl(), user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()), user.getVoters()))
+                .map(user -> new UserDTO(user.getId(), user.getFullname(), user.getEmail(), user.getAvatarUrl(), user.getRoles().stream().map(Role::getName).collect(Collectors.toSet())))
                 .collect(Collectors.toList());
     }
 
@@ -173,8 +179,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userrepo.findByEmail(email)
+        return  userrepo.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
-        return user;
+
     }
 }

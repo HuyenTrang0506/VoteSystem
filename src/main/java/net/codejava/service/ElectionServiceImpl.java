@@ -4,9 +4,11 @@ import net.codejava.dto.CandidateDTO;
 import net.codejava.dto.ElectionDTO;
 import net.codejava.entity.Candidate;
 import net.codejava.entity.Election;
+import net.codejava.entity.Voter;
 import net.codejava.repository.ElectionRepository;
 import net.codejava.service.service_interface.CandidateService;
 import net.codejava.service.service_interface.ElectionService;
+import net.codejava.service.service_interface.VoterService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,20 +27,30 @@ import javax.transaction.Transactional;
 @Service
 @Transactional
 public class ElectionServiceImpl implements ElectionService {
+
+    private final ElectionRepository electionRepository;
+
+
     @Autowired
-    private ElectionRepository electionRepository;
-    @Autowired
-    private CandidateService candidateService;
+    public ElectionServiceImpl(ElectionRepository electionRepository) {
+        this.electionRepository = electionRepository;
+    }
 
     @Override
     public Election save(Election election) {
 
         return electionRepository.save(election);
     }
+
     @Override
     public ElectionDTO save(ElectionDTO electionDTO) {
         Election election = convertToEntity(electionDTO);
         Election savedElection = electionRepository.save(election);
+        for (Voter voter : savedElection.getListVoters()) {
+            voter.setElection(savedElection);
+
+
+        }
         return convertToDTO(savedElection);
 
     }
@@ -90,6 +102,7 @@ public class ElectionServiceImpl implements ElectionService {
             return false; // Return false if deletion fails
         }
     }
+
     private ElectionDTO convertToDTO(Election election) {
         ElectionDTO electionDTO = new ElectionDTO();
         electionDTO.setId(election.getId());
@@ -97,12 +110,11 @@ public class ElectionServiceImpl implements ElectionService {
         electionDTO.setDescription(election.getDescription());
         electionDTO.setStartTime(election.getStartTime());
         electionDTO.setEndTime(election.getEndTime());
-        electionDTO.setListVoterIds(election.getVoterIds());
         electionDTO.setListCandidates(convertCandidatesToDTOs(election.getListCandidates()));
-        electionDTO.setListBallotIds(election.getBallotIds());
-        electionDTO.setResultId(election.getResultId());
         return electionDTO;
     }
+
+
     private Election convertToEntity(ElectionDTO electionDTO) {
         Election election = new Election();
         election.setId(electionDTO.getId());
@@ -110,11 +122,12 @@ public class ElectionServiceImpl implements ElectionService {
         election.setDescription(electionDTO.getDescription());
         election.setStartTime(electionDTO.getStartTime());
         election.setEndTime(electionDTO.getEndTime());
-        System.out.println("list candidate: "+electionDTO.getListCandidates().get(1).getName());
+        System.out.println("list candidate: " + electionDTO.getListCandidates().get(1).getName());
         election.setListCandidates(convertDTOsToCandidates(electionDTO.getListCandidates()));
         return election;
 
     }
+
     private List<CandidateDTO> convertCandidatesToDTOs(List<Candidate> candidates) {
         return candidates.stream()
                 .map(candidate -> new CandidateDTO(
@@ -126,6 +139,7 @@ public class ElectionServiceImpl implements ElectionService {
                 ))
                 .collect(Collectors.toList());
     }
+
     private List<Candidate> convertDTOsToCandidates(List<CandidateDTO> candidateDTOs) {
         return candidateDTOs.stream()
                 .map(dto -> {
@@ -139,4 +153,5 @@ public class ElectionServiceImpl implements ElectionService {
                 })
                 .collect(Collectors.toList());
     }
+
 }

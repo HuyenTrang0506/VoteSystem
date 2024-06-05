@@ -26,25 +26,23 @@ public class VotingSystem {
     public static void main(String[] args) {
         SpringApplication.run(VotingSystem.class, args);
     }
-    //run this code bellow only once when you run this application first time
 
-/*
-    @Bean
-        public void init() {
-            Role admin = new Role("ROLE_ADMIN");
-            Role user = new Role("ROLE_USER");
-            roleRepository.save(admin);
-            roleRepository.save(user);
-            Permission p1 = new Permission("VIEW PROGRESS");
-            Permission p2 = new Permission("TERMINATE VOTING");
-            Permission p3 = new Permission("VOTER MANAGEMENT");
-            Permission p4 = new Permission("CANDIDATE MANAGEMENT");
-            permissionRepository.save(p1);
-            permissionRepository.save(p2);
-            permissionRepository.save(p3);
-            permissionRepository.save(p4);
-        }
-*/
+    //run this code bellow only once when you run this application first time
+//    @Bean
+//        public void init() {
+//            Role admin = new Role("ROLE_ADMIN");
+//            Role user = new Role("ROLE_USER");
+//            roleRepository.save(admin);
+//            roleRepository.save(user);
+//            Permission p1 = new Permission("VIEW PROGRESS");
+//            Permission p2 = new Permission("TERMINATE VOTING");
+//            Permission p3 = new Permission("VOTER MANAGEMENT");
+//            Permission p4 = new Permission("CANDIDATE MANAGEMENT");
+//            permissionRepository.save(p1);
+//            permissionRepository.save(p2);
+//            permissionRepository.save(p3);
+//            permissionRepository.save(p4);
+//        }
 
 
 }

@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 
 
 @Entity
@@ -32,18 +33,20 @@ public class Election {
     private LocalDateTime endTime;
 
 
-
-    @OneToMany(mappedBy = "election",cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    @OneToMany(mappedBy = "election", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Voter> listVoters;
-
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "election_id")
     private List<Candidate> listCandidates;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "election", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ballot> listBallots;
+    @JsonIgnore
     @OneToOne(mappedBy = "election", cascade = CascadeType.ALL, orphanRemoval = true)
     private Result result;
+
     //constructors
     public Election(String title, String description, LocalDateTime startTime, LocalDateTime endTime, List<Voter> listVoters, List<Candidate> listCandidates, List<Ballot> listBallots, Result result) {
         this.title = title;
@@ -55,26 +58,35 @@ public class Election {
         this.listBallots = listBallots;
         this.result = result;
     }
+
     public Election(String title, String description, LocalDateTime startTime, LocalDateTime endTime) {
 
         this.title = title;
         this.description = description;
         this.startTime = startTime;
         this.endTime = endTime;
-         init();
+        init();
     }
+
     public Election() {
-       init();
+        init();
     }
-    private void init(){
+
+    private void init() {
         this.listVoters = new ArrayList<>();
         this.listCandidates = new ArrayList<>();
         this.listBallots = new ArrayList<>();
         result = null;
     }
 
+    //check if result is null
     public Long getResultId() {
-        return result.getId();
+        if (result == null) {
+            return null;
+        } else {
+            return result.getId();
+        }
+
     }
 
     public List<Long> getVoterIds() {

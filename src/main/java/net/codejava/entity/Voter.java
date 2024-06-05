@@ -11,7 +11,7 @@ import java.util.Set;
 @Table(name = "voters")
 @Setter
 @Getter
-@NoArgsConstructor
+
 @AllArgsConstructor
 @EqualsAndHashCode
 public class Voter {
@@ -27,15 +27,38 @@ public class Voter {
     @ManyToOne
     @JoinColumn(name = "election_id", nullable = false)
     private Election election;
-    @ManyToMany
+    @OneToMany
     @JoinTable(
             name = "voter_permissions",
             joinColumns = @JoinColumn(name = "voter_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     private Set<Permission> permissions = new HashSet<>();
+    public void addPermission(Permission permission) {
+        this.permissions.add(permission);
+    }
+    public void removePermission(Permission permission) {
+        this.permissions.remove(permission);
+    }
+    public Voter(){
+        this.user= null;
+        this.election = null;
+        
+    }
+    public Voter(User user) {
+        this.user = user;
+        this.election = null;
+    }
+    public Voter(User user, Election election) {
+        this.user = user;
+        this.election = election;
+    }
+    public Voter(User user, Election election, Set<Permission> permissions) {
+        this.user = user;
+        this.election = election;
+        this.permissions = permissions;
+}
 
-
-
-
+    public void setPermission(List<Permission> permissions) {
+    }
 }
