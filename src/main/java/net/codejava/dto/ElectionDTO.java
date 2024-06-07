@@ -18,5 +18,6 @@ public class ElectionDTO {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private List<CandidateDTO> listCandidates;
+    private List<Long> userIds;
 }
 

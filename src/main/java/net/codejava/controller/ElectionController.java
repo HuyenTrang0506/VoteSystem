@@ -7,7 +7,7 @@ import net.codejava.entity.Election;
 import net.codejava.entity.User;
 import net.codejava.exception_handler.CustomErrorResponse;
 import net.codejava.service.service_interface.ElectionService;
-import net.codejava.service.service_interface.VoterService;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Role;
@@ -24,11 +24,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/elections")
 public class ElectionController {
     private final ElectionService electionService;
-    private final VoterService voterService;
+
     @Autowired
-    public ElectionController(ElectionService electionService,  VoterService voterService) {
+    public ElectionController(ElectionService electionService) {
         this.electionService = electionService;
-        this.voterService = voterService;
+
     }
     @GetMapping()
     public List<ElectionDTO> getAllElections() {
@@ -38,8 +38,8 @@ public class ElectionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Election> getElectionById(@PathVariable Long id) {
-        Election election = electionService.findElectionById(id);
+    public ResponseEntity<ElectionDTO> getElectionById(@PathVariable Long id) {
+        ElectionDTO election = electionService.findElectionById(id);
         return ResponseEntity.status(HttpStatus.OK).body(election);
     }
 
@@ -50,13 +50,20 @@ public class ElectionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(electionDTO1);
     }
     //save voter with election id, user id and its permission
-    @PostMapping("/voter-permission/{id}")
-    public List<VoterDTO> saveVoterPermission(@PathVariable Long id,@RequestBody List<VoterDTO> listVoterDTO) {
-        return  voterService.saveVoterPermission(id,listVoterDTO);
+//    @PostMapping("/voter-permission/{id}")
+//    public List<VoterDTO> saveVoterPermission(@PathVariable Long id,@RequestBody List<VoterDTO> listVoterDTO) {
+//        return  voterService.saveVoterPermission(id,listVoterDTO);
+//
+//    }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteElection(@PathVariable Long id) {
+        if (electionService.delete(id)) {
+            return ResponseEntity.status(HttpStatus.OK).body("Election with id " + id + " deleted successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Election with id " + id + " not found");
+        }
     }
-
-
 //
 
 }

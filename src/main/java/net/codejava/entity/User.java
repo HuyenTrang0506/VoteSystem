@@ -1,5 +1,7 @@
 package net.codejava.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
@@ -51,12 +53,17 @@ public class User implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
-    private Set<Voter> voters = new HashSet<>();
+    //    @OneToMany(mappedBy = "user")
+//    private Set<Voter> voters = new HashSet<>();
+
+    @ManyToMany(mappedBy = "users")
+    private Set<Election> elections = new HashSet<>();
+
     public User(String email, String password) {
         this.email = email;
         this.password = password;
     }
+
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -77,16 +84,19 @@ public class User implements UserDetails {
     public boolean isAccountNonExpired() {
         return true;
     }
+
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
+
     @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
     @JsonIgnore
     @Override
     public boolean isEnabled() {
@@ -96,22 +106,22 @@ public class User implements UserDetails {
     public void addRole(Role role) {
         this.roles.add(role);
     }
-    public void addVoter(Voter voter) {
-        this.voters.add(voter);
-    }
-    public List<Long> getVoterIds(){
-        List<Long> voterIds = new ArrayList<>();
-        for (Voter voter : voters) {
-            voterIds.add(voter.getId());
-        }
-        return voterIds;
-    }
+//    public void addVoter(Voter voter) {
+//        this.voters.add(voter);
+//    }
+//    public List<Long> getVoterIds(){
+//        List<Long> voterIds = new ArrayList<>();
+//        for (Voter voter : voters) {
+//            voterIds.add(voter.getId());
+//        }
+//        return voterIds;
+//    }
 
-    public List<Long> getElectionIdsByVoters() {
-        List<Long> electionIds = new ArrayList<>();
-        for (Voter voter : voters) {
-            electionIds.add(voter.getElection().getId());
-        }
-        return electionIds;
-    }
+//    public List<Long> getElectionIdsByVoters() {
+//        List<Long> electionIds = new ArrayList<>();
+//        for (Voter voter : voters) {
+//            electionIds.add(voter.getElection().getId());
+//        }
+//        return electionIds;
+//    }
 }

@@ -8,7 +8,7 @@ import lombok.*;
 @Table(name = "candidates")
 @Setter
 @Getter
-@NoArgsConstructor
+
 @AllArgsConstructor
 @EqualsAndHashCode
 
@@ -28,6 +28,12 @@ public class Candidate {
 
     @Column(name = "contact_information")
     private String contactInformation;
+    public Candidate (){
+        this.name = "";
+        this.description = "";
+        this.image = "";
+        this.contactInformation = "";
+    }
     private void output(){
         System.out.println("Candidate: " + name + " " + description + " " + image + " " + contactInformation);
     }

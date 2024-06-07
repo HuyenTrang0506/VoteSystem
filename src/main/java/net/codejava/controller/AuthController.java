@@ -2,6 +2,8 @@ package net.codejava.controller;
 
 import net.codejava.dto.AuthRequest;
 import net.codejava.dto.AuthResponse;
+import net.codejava.dto.UserDTO;
+import net.codejava.entity.Role;
 import net.codejava.entity.User;
 import net.codejava.exception_handler.CustomErrorResponse;
 import net.codejava.jwt.JwtTokenUtil;
@@ -23,6 +25,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -43,8 +46,9 @@ public class AuthController {
 
         try {
             User createdUser = userService.registerUser(authRequest);
-            AuthResponse authResponse = new AuthResponse(createdUser.getId(), createdUser.getEmail(), null, createdUser.getRoles(), createdUser.getFullname());
-            return ResponseEntity.ok(authResponse);
+
+            UserDTO response = new UserDTO(createdUser.getId(), createdUser.getFullname(), createdUser.getEmail(), null, createdUser.getAvatarUrl(), createdUser.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
+            return ResponseEntity.ok(response);
         } catch (DataIntegrityViolationException ex) {
             // Xử lý ngoại lệ nếu email đã tồn tại trong cơ sở dữ liệu
             CustomErrorResponse response = new CustomErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), "Email is already taken ", "/auth/register");
@@ -75,7 +79,8 @@ public class AuthController {
             );
             User user = (User) authentication.getPrincipal();
             String accessToken = jwtUtil.generateAccessToken(user);
-            AuthResponse response = new AuthResponse(user.getId(), user.getEmail(), accessToken, user.getRoles(), user.getFullname());
+
+            UserDTO response =new UserDTO(user.getId(), user.getFullname(), user.getEmail(),accessToken, user.getAvatarUrl(), user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             //check auth in security context
            Authentication authcheck= SecurityContextHolder.getContext().getAuthentication();

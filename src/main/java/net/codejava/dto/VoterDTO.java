@@ -13,17 +13,17 @@ public class VoterDTO {
     private Long userId;
 
 
-    private Set<String> permissions;
+//    private Set<String> permissions;
     // Constructors, getters, setters
     public VoterDTO() {
     }
 
-    public VoterDTO(Long id, Long electionId, Long userId,  Set<String> permissions) {
+    public VoterDTO(Long id, Long electionId, Long userId) {
         this.id = id;
         this.electionId = electionId;
         this.userId = userId;
-
-        this.permissions = permissions;
+//
+//        this.permissions = permissions;
     }
 
     public Long getId() {

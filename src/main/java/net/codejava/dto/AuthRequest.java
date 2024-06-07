@@ -20,9 +20,7 @@ public class AuthRequest {
     @NotNull
     @Length(min = 5, max = 50)
     private String password;
-    @NotNull
-
-
+   
     public AuthRequest(String email, String password) {
         this.email = email;
         this.password = password;

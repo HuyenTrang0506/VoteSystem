@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 
@@ -33,13 +34,23 @@ public class Election {
     private LocalDateTime endTime;
 
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "election", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Voter> listVoters;
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "election", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Voter> listVoters;
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "election_id")
     private List<Candidate> listCandidates;
+
+    @ManyToMany
+    @JoinTable(
+            name = "election_users",
+            joinColumns = @JoinColumn(name = "election_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> users ;
+
     @JsonIgnore
     @OneToMany(mappedBy = "election", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ballot> listBallots;
@@ -48,16 +59,7 @@ public class Election {
     private Result result;
 
     //constructors
-    public Election(String title, String description, LocalDateTime startTime, LocalDateTime endTime, List<Voter> listVoters, List<Candidate> listCandidates, List<Ballot> listBallots, Result result) {
-        this.title = title;
-        this.description = description;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.listVoters = listVoters;
-        this.listCandidates = listCandidates;
-        this.listBallots = listBallots;
-        this.result = result;
-    }
+
 
     public Election(String title, String description, LocalDateTime startTime, LocalDateTime endTime) {
 
@@ -73,7 +75,7 @@ public class Election {
     }
 
     private void init() {
-        this.listVoters = new ArrayList<>();
+        this.users = new ArrayList<>();
         this.listCandidates = new ArrayList<>();
         this.listBallots = new ArrayList<>();
         result = null;
@@ -89,12 +91,19 @@ public class Election {
 
     }
 
-    public List<Long> getVoterIds() {
-        List<Long> voterIds = new ArrayList<>();
-        for (Voter voter : listVoters) {
-            voterIds.add(voter.getId());
+//    public List<Long> getVoterIds() {
+//        List<Long> voterIds = new ArrayList<>();
+//        for (Voter voter : listVoters) {
+//            voterIds.add(voter.getId());
+//        }
+//        return voterIds;
+//    }
+    public List<Long> getUserIds() {
+        List<Long> userIds = new ArrayList<>();
+        for (User user : users) {
+            userIds.add(user.getId());
         }
-        return voterIds;
+        return userIds;
     }
 
     public List<Long> getCandidateIds() {

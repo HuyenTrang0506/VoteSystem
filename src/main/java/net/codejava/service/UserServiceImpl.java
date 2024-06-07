@@ -5,7 +5,7 @@ import net.codejava.dto.UserDTO;
 import net.codejava.entity.Role;
 import net.codejava.entity.User;
 
-import net.codejava.entity.Voter;
+
 import net.codejava.repository.RoleRepository;
 import net.codejava.repository.UserRepository;
 import net.codejava.service.service_interface.UserService;
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public List<UserDTO> getAllUser() {
         List<User> users = userrepo.findAll();
         return users.stream()
-                .map(user -> new UserDTO(user.getId(), user.getFullname(), user.getEmail(), user.getAvatarUrl(), user.getRoles().stream().map(Role::getName).collect(Collectors.toSet())))
+                .map(user -> new UserDTO(user.getId(), user.getFullname(), user.getEmail(),null, user.getAvatarUrl(), user.getRoles().stream().map(Role::getName).collect(Collectors.toSet())))
                 .collect(Collectors.toList());
     }
 

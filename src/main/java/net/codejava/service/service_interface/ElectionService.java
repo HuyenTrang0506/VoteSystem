@@ -10,7 +10,7 @@ public interface ElectionService {
     Election save(Election election);
     ElectionDTO save(ElectionDTO electionDTO);
 
-    Election findElectionById(Long id);
+    ElectionDTO findElectionById(Long id);
     Election update(Election election);
     Boolean delete(Election election);
 

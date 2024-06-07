@@ -14,8 +14,8 @@ public class AuthResponse {
     private Long id;
     private String email;
     private String accessToken;
-    private Set<Role> roles;
-    private String username;
+    private Set<String> roles;
+    private String fullname;
 
 //constructor
 

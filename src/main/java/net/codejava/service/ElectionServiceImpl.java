@@ -4,11 +4,13 @@ import net.codejava.dto.CandidateDTO;
 import net.codejava.dto.ElectionDTO;
 import net.codejava.entity.Candidate;
 import net.codejava.entity.Election;
-import net.codejava.entity.Voter;
+import net.codejava.entity.User;
 import net.codejava.repository.ElectionRepository;
+import net.codejava.repository.UserRepository;
 import net.codejava.service.service_interface.CandidateService;
 import net.codejava.service.service_interface.ElectionService;
-import net.codejava.service.service_interface.VoterService;
+
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,7 @@ import org.springframework.stereotype.Service;
 import net.codejava.config.ModelMapperConfig;
 
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -29,11 +30,12 @@ import javax.transaction.Transactional;
 public class ElectionServiceImpl implements ElectionService {
 
     private final ElectionRepository electionRepository;
-
+    private final UserRepository userRepository;
 
     @Autowired
-    public ElectionServiceImpl(ElectionRepository electionRepository) {
+    public ElectionServiceImpl(ElectionRepository electionRepository,UserRepository userRepository) {
         this.electionRepository = electionRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -46,24 +48,27 @@ public class ElectionServiceImpl implements ElectionService {
     public ElectionDTO save(ElectionDTO electionDTO) {
         Election election = convertToEntity(electionDTO);
         Election savedElection = electionRepository.save(election);
-        for (Voter voter : savedElection.getListVoters()) {
-            voter.setElection(savedElection);
 
 
-        }
+
+//        for (Voter voter : savedElection.getListVoters()) {
+//            voter.setElection(savedElection);
+//
+//
+//        }
         return convertToDTO(savedElection);
 
     }
 
 
     @Override
-    public Election findElectionById(Long id) {
+    public ElectionDTO findElectionById(Long id) {
         Optional<Election> q = electionRepository.findById(id);
-        Election election = null;
+        ElectionDTO electionDto = null;
         if (q.isPresent()) {
-            election = q.get();
+            electionDto = convertToDTO(q.get());
         }
-        return election;
+        return electionDto;
 
     }
 
@@ -111,6 +116,8 @@ public class ElectionServiceImpl implements ElectionService {
         electionDTO.setStartTime(election.getStartTime());
         electionDTO.setEndTime(election.getEndTime());
         electionDTO.setListCandidates(convertCandidatesToDTOs(election.getListCandidates()));
+        System.out.println("list user: " + election.getUsers().size());
+        electionDTO.setUserIds(election.getUserIds());
         return electionDTO;
     }
 
@@ -124,6 +131,18 @@ public class ElectionServiceImpl implements ElectionService {
         election.setEndTime(electionDTO.getEndTime());
         System.out.println("list candidate: " + electionDTO.getListCandidates().get(1).getName());
         election.setListCandidates(convertDTOsToCandidates(electionDTO.getListCandidates()));
+        List<User> users = new ArrayList<>();
+        List<Long> userIds = electionDTO.getUserIds();
+        if (userIds != null) {
+        for(Long id : electionDTO.getUserIds()){
+            System.out.println("userid size: " + electionDTO.getUserIds().size());
+            Optional<User> userOptional = userRepository.findById(id);
+            if(userOptional.isPresent()){
+                users.add(userOptional.get());
+            }
+            election.setUsers(users);
+            System.out.println("user: " + users.size()+"userId"+ electionDTO.getUserIds().get(0));
+        }}
         return election;
 
     }
