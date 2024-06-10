@@ -17,10 +17,10 @@ public interface UserService {
     User changeAvatar(String url, Principal principal);
 
     List<UserDTO> getAllUser();
-
-
+    UserDTO findUserById(Long id);
+    UserDTO changePro(Long id);
     Boolean delete(User user);
-
+    Boolean delete(Long id);
 
     Boolean sendEmail(String to, String subject, String body) ;
     User findUserByEmail(String email);

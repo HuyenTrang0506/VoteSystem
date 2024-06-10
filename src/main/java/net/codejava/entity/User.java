@@ -44,7 +44,8 @@ public class User implements UserDetails {
     @Basic(fetch = FetchType.LAZY)
     @Column(columnDefinition = "LONGBLOB")
     private byte[] avatarUrl;
-
+    @Column(nullable = false)
+    private boolean isPro = false;
     @ManyToMany
     @JoinTable(
             name = "users_roles",
@@ -102,9 +103,15 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
+    void changePro(){
+        this.isPro = !this.isPro;
+    }
     public void addRole(Role role) {
         this.roles.add(role);
+    }
+
+    public boolean getIsPro() {
+        return isPro;
     }
 //    public void addVoter(Voter voter) {
 //        this.voters.add(voter);

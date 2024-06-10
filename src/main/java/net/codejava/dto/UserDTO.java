@@ -17,7 +17,8 @@ public class UserDTO {
     private String email;
     private String accessToken;
     private byte[] avatarUrl;
-    private Set<String> roles; // Assuming roles are represented as strings
+    private Set<String> roles;
+    private boolean isPro;// Assuming roles are represented as strings
 
 
 }

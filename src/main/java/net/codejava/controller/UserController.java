@@ -32,7 +32,14 @@ public class UserController {
         List<UserDTO> users = userService.getAllUser();
         return ResponseEntity.ok(users);
     }
-//    @RolesAllowed("USER")
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.findUserById(id));
+    }
+    @PatchMapping("/pro/{id}")
+    public ResponseEntity<UserDTO> changePro(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.changePro(id));
+    }
     @PatchMapping("/password")
     public ResponseEntity<User> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO, Principal principal) {
         User user = userService.changePassword(changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword(), principal);
@@ -45,7 +52,10 @@ public class UserController {
         return ResponseEntity.ok(userService.changeAvatar(changeAvatarDTO.getUrl(), principal));
     }
 
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> deleteUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.delete(id));
+    }
 
 }
 

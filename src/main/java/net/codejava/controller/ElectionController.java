@@ -47,7 +47,7 @@ public class ElectionController {
     @PostMapping
     public ResponseEntity<ElectionDTO> saveElection(@RequestBody ElectionDTO electionDTO) {
         ElectionDTO electionDTO1 = electionService.save(electionDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(electionDTO1);
+        return ResponseEntity.status(HttpStatus.OK).body(electionDTO1);
     }
     //save voter with election id, user id and its permission
 //    @PostMapping("/voter-permission/{id}")

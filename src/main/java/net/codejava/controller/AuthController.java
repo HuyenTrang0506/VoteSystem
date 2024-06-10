@@ -47,7 +47,7 @@ public class AuthController {
         try {
             User createdUser = userService.registerUser(authRequest);
 
-            UserDTO response = new UserDTO(createdUser.getId(), createdUser.getFullname(), createdUser.getEmail(), null, createdUser.getAvatarUrl(), createdUser.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
+            UserDTO response = new UserDTO(createdUser.getId(), createdUser.getFullname(), createdUser.getEmail(), null, createdUser.getAvatarUrl(), createdUser.getRoles().stream().map(Role::getName).collect(Collectors.toSet()), createdUser.getIsPro());
             return ResponseEntity.ok(response);
         } catch (DataIntegrityViolationException ex) {
             // Xử lý ngoại lệ nếu email đã tồn tại trong cơ sở dữ liệu
@@ -80,7 +80,7 @@ public class AuthController {
             User user = (User) authentication.getPrincipal();
             String accessToken = jwtUtil.generateAccessToken(user);
 
-            UserDTO response =new UserDTO(user.getId(), user.getFullname(), user.getEmail(),accessToken, user.getAvatarUrl(), user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
+            UserDTO response =new UserDTO(user.getId(), user.getFullname(), user.getEmail(),accessToken, user.getAvatarUrl(), user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()), user.getIsPro());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             //check auth in security context
            Authentication authcheck= SecurityContextHolder.getContext().getAuthentication();

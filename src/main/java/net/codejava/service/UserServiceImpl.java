@@ -60,7 +60,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setPassword(encodedPassword);
         return userrepo.save(user);
     }
-
+    @Override
+    public UserDTO changePro(Long id) {
+        Optional<User> user = userrepo.findById(id);
+        if (user.isPresent()) {
+            User existingUser = user.get();
+            existingUser.setPro(!existingUser.getIsPro());
+           userrepo.save(existingUser);
+            return new UserDTO(existingUser.getId(), existingUser.getFullname(), existingUser.getEmail(), null, existingUser.getAvatarUrl(), existingUser.getRoles().stream().map(Role::getName).collect(Collectors.toSet()),existingUser.getIsPro());
+        } else {
+            throw new NoSuchElementException("User not found with email: " + id);
+        }
+    }
 
     @Override
     public User save(User user) {
@@ -76,8 +87,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public List<UserDTO> getAllUser() {
         List<User> users = userrepo.findAll();
         return users.stream()
-                .map(user -> new UserDTO(user.getId(), user.getFullname(), user.getEmail(),null, user.getAvatarUrl(), user.getRoles().stream().map(Role::getName).collect(Collectors.toSet())))
+                .map(user -> new UserDTO(user.getId(), user.getFullname(), user.getEmail(),null, user.getAvatarUrl(), user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()),user.getIsPro()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDTO findUserById(Long id) {
+        Optional<User> user = userrepo.findById(id);
+        if (user.isPresent()) {
+            User u = user.get();
+            return new UserDTO(u.getId(), u.getFullname(), u.getEmail(), null, u.getAvatarUrl(), u.getRoles().stream().map(Role::getName).collect(Collectors.toSet()),u.getIsPro());
+        } else {
+            throw new NoSuchElementException("User not found with id: " + id);
+        }
     }
 
     @Override
@@ -138,6 +160,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public Boolean delete(Long id) {
+        return userrepo.findById(id)
+                .map(user -> {
+                    userrepo.delete(user);
+                    return true;
+                }).orElse(false);
     }
 
 
