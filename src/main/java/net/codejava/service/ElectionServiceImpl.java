@@ -13,6 +13,8 @@ import net.codejava.service.service_interface.ElectionService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import net.codejava.config.ModelMapperConfig;
@@ -43,6 +45,7 @@ public class ElectionServiceImpl implements ElectionService {
 
         return electionRepository.save(election);
     }
+    @CacheEvict(value = "elections", allEntries = true)
 
     @Override
     public ElectionDTO save(ElectionDTO electionDTO) {
@@ -60,6 +63,7 @@ public class ElectionServiceImpl implements ElectionService {
 
     }
 
+    @Cacheable(value = "elections", key = "#id")
 
     @Override
     public ElectionDTO findElectionById(Long id) {
@@ -72,12 +76,16 @@ public class ElectionServiceImpl implements ElectionService {
 
     }
 
-    @Override
-    public Election update(Election election) {
 
-        return null;
+    @Override
+    public List<ElectionDTO> getAllElection() {
+        List<Election> elections = electionRepository.findAll();
+        return elections.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
+    @CacheEvict(value = "elections", allEntries = true)
     @Override
     public Boolean delete(Election election) {
         try {
@@ -89,14 +97,7 @@ public class ElectionServiceImpl implements ElectionService {
         }
     }
 
-    @Override
-    public List<ElectionDTO> getAllElection() {
-        List<Election> elections = electionRepository.findAll();
-        return elections.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-
+    @CacheEvict(value = "elections", allEntries = true)
     @Override
     public Boolean delete(Long id) {
         try {
@@ -107,7 +108,11 @@ public class ElectionServiceImpl implements ElectionService {
             return false; // Return false if deletion fails
         }
     }
+    @Override
+    public Election update(Election election) {
 
+        return null;
+    }
     private ElectionDTO convertToDTO(Election election) {
         ElectionDTO electionDTO = new ElectionDTO();
         electionDTO.setId(election.getId());
@@ -154,7 +159,8 @@ public class ElectionServiceImpl implements ElectionService {
                         candidate.getName(),
                         candidate.getDescription(),
                         candidate.getImage(),
-                        candidate.getContactInformation()
+                        candidate.getContactInformation(),
+                        candidate.getBallotCount()
                 ))
                 .collect(Collectors.toList());
     }
@@ -168,6 +174,7 @@ public class ElectionServiceImpl implements ElectionService {
                     candidate.setDescription(dto.getDescription());
                     candidate.setImage(dto.getImageUrl());
                     candidate.setContactInformation(dto.getContactInformation());
+                    candidate.setBallotCount(dto.getBallotCount());
                     return candidate;
                 })
                 .collect(Collectors.toList());

@@ -11,6 +11,8 @@ import net.codejava.repository.UserRepository;
 import net.codejava.service.service_interface.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,6 +62,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setPassword(encodedPassword);
         return userrepo.save(user);
     }
+
     @Override
     public UserDTO changePro(Long id) {
         Optional<User> user = userrepo.findById(id);
@@ -72,7 +75,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new NoSuchElementException("User not found with email: " + id);
         }
     }
-
+    @CacheEvict(value = "users", key = "#id")
     @Override
     public User save(User user) {
         Set<Role> roles = new HashSet<>();
@@ -90,7 +93,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .map(user -> new UserDTO(user.getId(), user.getFullname(), user.getEmail(),null, user.getAvatarUrl(), user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()),user.getIsPro()))
                 .collect(Collectors.toList());
     }
-
+    @Cacheable(value = "users", key = "#id")
     @Override
     public UserDTO findUserById(Long id) {
         Optional<User> user = userrepo.findById(id);
@@ -101,7 +104,66 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new NoSuchElementException("User not found with id: " + id);
         }
     }
+    @Cacheable(value = "users", key = "#email")
+    @Override
+    public User findUserByEmail(String email) {
+        Optional<User> u = userrepo.findByEmail(email);
+        User user = null;
+        if (u.isPresent()) {
+            user = u.get();
+        }
+        return user;
+    }
 
+
+    @CacheEvict(value = "users", allEntries = true)
+    @Override
+    public Boolean delete(User user) {
+        try {
+            userrepo.delete(user);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @CacheEvict(value = "users", allEntries = true)
+    @Override
+    public Boolean delete(Long id) {
+        return userrepo.findById(id)
+                .map(user -> {
+                    userrepo.delete(user);
+                    return true;
+                }).orElse(false);
+    }
+
+
+
+    @Override
+    public Boolean sendEmail(String to, String subject, String body) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("tranghuyen9696@gmail.com");
+
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+        javaMailSender.send(message);
+        System.out.println("Send mail successfully");
+        return true;
+    }
+
+    public String generateOTP() {
+        // Tạo một chuỗi ngẫu nhiên
+        String randomString = "your-random-string"; // Thay thế bằng chuỗi ngẫu nhiên thực tế
+
+        // Áp dụng thuật toán SHA-256 để mã hóa chuỗi ngẫu nhiên
+        String otp = DigestUtils.sha256Hex(randomString);
+
+        // Trích xuất 6 ký tự đầu tiên của mã OTP
+        otp = otp.substring(0, 6);
+
+        return otp;
+    }
     @Override
     public User changePassword(String oldPassword, String password, Principal principal) {
         String email = principal.getName();
@@ -151,63 +213,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new NoSuchElementException("User not found with email: " + email);
         }
     }
-
-    @Override
-    public Boolean delete(User user) {
-        try {
-            userrepo.delete(user);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    @Override
-    public Boolean delete(Long id) {
-        return userrepo.findById(id)
-                .map(user -> {
-                    userrepo.delete(user);
-                    return true;
-                }).orElse(false);
-    }
-
-
-    @Override
-    public User findUserByEmail(String email) {
-        Optional<User> u = userrepo.findByEmail(email);
-        User user = null;
-        if (u.isPresent()) {
-            user = u.get();
-        }
-        return user;
-    }
-
-    @Override
-    public Boolean sendEmail(String to, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("tranghuyen9696@gmail.com");
-
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
-        javaMailSender.send(message);
-        System.out.println("Send mail successfully");
-        return true;
-    }
-
-    public String generateOTP() {
-        // Tạo một chuỗi ngẫu nhiên
-        String randomString = "your-random-string"; // Thay thế bằng chuỗi ngẫu nhiên thực tế
-
-        // Áp dụng thuật toán SHA-256 để mã hóa chuỗi ngẫu nhiên
-        String otp = DigestUtils.sha256Hex(randomString);
-
-        // Trích xuất 6 ký tự đầu tiên của mã OTP
-        otp = otp.substring(0, 6);
-
-        return otp;
-    }
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return  userrepo.findByEmail(email)

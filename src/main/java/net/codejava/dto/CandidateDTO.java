@@ -15,9 +15,10 @@ public class CandidateDTO {
     private String description;
     private String imageUrl;
     private String contactInformation;
+    private int ballotCount;
 
 
     public String output() {
-        return "Candidate: " + name + " " + description + " " + imageUrl + " " + contactInformation;
+        return "Candidate: " + name + " " + description + " " + imageUrl + " " + contactInformation+" "+ballotCount;
     }
 }

@@ -3,6 +3,7 @@ package net.codejava.config;
 import net.codejava.jwt.JwtTokenFilter;
 import net.codejava.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +29,7 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity(debug = true)
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
+
 public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -72,7 +74,7 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173","http://localhost:51223"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173","http://localhost:53402"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true); // Allow credentials such as cookies (if any)

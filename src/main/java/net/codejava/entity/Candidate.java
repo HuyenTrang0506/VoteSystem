@@ -28,14 +28,21 @@ public class Candidate {
 
     @Column(name = "contact_information")
     private String contactInformation;
+    @Column(name = "ballot_count")
+    private int ballotCount;
     public Candidate (){
         this.name = "";
         this.description = "";
         this.image = "";
         this.contactInformation = "";
+        this.ballotCount = 0;
     }
     private void output(){
-        System.out.println("Candidate: " + name + " " + description + " " + image + " " + contactInformation);
+        System.out.println("Candidate: " + name + " " + description + " " + image + " " + contactInformation+"ballot_count "+ballotCount);
     }
+    public void incrementBallotCount(){
+        this.ballotCount++;
+    }
+
     // Constructors, getters, setters
 }

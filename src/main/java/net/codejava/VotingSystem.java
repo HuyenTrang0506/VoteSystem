@@ -9,10 +9,12 @@ import net.codejava.service.service_interface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 
 @SpringBootApplication
+@EnableCaching
 public class VotingSystem {
     @Autowired
     private RoleRepository roleRepository;

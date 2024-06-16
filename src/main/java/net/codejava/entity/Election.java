@@ -50,10 +50,10 @@ public class Election {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> users ;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "election", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ballot> listBallots;
+//
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "election", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Ballot> listBallots;
     @JsonIgnore
     @OneToOne(mappedBy = "election", cascade = CascadeType.ALL, orphanRemoval = true)
     private Result result;
@@ -77,7 +77,7 @@ public class Election {
     private void init() {
         this.users = new ArrayList<>();
         this.listCandidates = new ArrayList<>();
-        this.listBallots = new ArrayList<>();
+
         result = null;
     }
 
@@ -114,12 +114,5 @@ public class Election {
         return candidateIds;
     }
 
-    public List<Long> getBallotIds() {
-        List<Long> ballotIds = new ArrayList<>();
-        for (Ballot ballot : listBallots) {
-            ballotIds.add(ballot.getId());
-        }
-        return ballotIds;
-    }
 }
 

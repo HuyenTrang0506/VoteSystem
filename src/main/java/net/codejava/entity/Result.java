@@ -16,7 +16,7 @@ public class Result {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "election_id")
+    @JoinColumn(name = "election_id", unique = true)
     private Election election;
 
     @Column(name = "ballot_count")
