@@ -34,9 +34,9 @@ public class Election {
     private LocalDateTime endTime;
 
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "election", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Voter> listVoters;
+    @JsonIgnore
+    @OneToMany(mappedBy = "election", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Voter> listVoters;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -91,13 +91,13 @@ public class Election {
 
     }
 
-//    public List<Long> getVoterIds() {
-//        List<Long> voterIds = new ArrayList<>();
-//        for (Voter voter : listVoters) {
-//            voterIds.add(voter.getId());
-//        }
-//        return voterIds;
-//    }
+    public List<Long> getVoterIds() {
+        List<Long> voterIds = new ArrayList<>();
+        for (Voter voter : listVoters) {
+            voterIds.add(voter.getId());
+        }
+        return voterIds;
+    }
     public List<Long> getUserIds() {
         List<Long> userIds = new ArrayList<>();
         for (User user : users) {

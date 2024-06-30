@@ -15,7 +15,7 @@ public class CandidateDTO {
     private String description;
     private String imageUrl;
     private String contactInformation;
-    private int ballotCount;
+    private Integer ballotCount;
 
 
     public String output() {

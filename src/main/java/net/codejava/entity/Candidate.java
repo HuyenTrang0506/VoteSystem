@@ -29,7 +29,7 @@ public class Candidate {
     @Column(name = "contact_information")
     private String contactInformation;
     @Column(name = "ballot_count")
-    private int ballotCount;
+    private Integer ballotCount;
     public Candidate (){
         this.name = "";
         this.description = "";

@@ -5,6 +5,7 @@ import net.codejava.dto.ElectionDTO;
 import net.codejava.entity.Candidate;
 import net.codejava.entity.Election;
 import net.codejava.entity.User;
+import net.codejava.entity.Voter;
 import net.codejava.repository.ElectionRepository;
 import net.codejava.repository.UserRepository;
 import net.codejava.service.service_interface.CandidateService;
@@ -54,11 +55,11 @@ public class ElectionServiceImpl implements ElectionService {
 
 
 
-//        for (Voter voter : savedElection.getListVoters()) {
-//            voter.setElection(savedElection);
-//
-//
-//        }
+        for (Voter voter : savedElection.getListVoters()) {
+            voter.setElection(savedElection);
+
+
+        }
         return convertToDTO(savedElection);
 
     }
@@ -160,7 +161,7 @@ public class ElectionServiceImpl implements ElectionService {
                         candidate.getDescription(),
                         candidate.getImage(),
                         candidate.getContactInformation(),
-                        candidate.getBallotCount()
+                        candidate.getBallotCount()!= null ? candidate.getBallotCount() : 0
                 ))
                 .collect(Collectors.toList());
     }
@@ -174,8 +175,7 @@ public class ElectionServiceImpl implements ElectionService {
                     candidate.setDescription(dto.getDescription());
                     candidate.setImage(dto.getImageUrl());
                     candidate.setContactInformation(dto.getContactInformation());
-                    candidate.setBallotCount(dto.getBallotCount());
-                    return candidate;
+                    candidate.setBallotCount(dto.getBallotCount() != null ? dto.getBallotCount() : 0);                    return candidate;
                 })
                 .collect(Collectors.toList());
     }

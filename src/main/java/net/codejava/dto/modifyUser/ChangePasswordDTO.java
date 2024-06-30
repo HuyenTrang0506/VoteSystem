@@ -1,4 +1,4 @@
-package net.codejava.dto.modifyUser;
+package net.codejava.dto;
 
 
 import lombok.AllArgsConstructor;

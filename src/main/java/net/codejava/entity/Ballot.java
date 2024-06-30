@@ -15,11 +15,11 @@ public class Ballot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ballot_id")
     private Long id;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "election_id")
-//
-//    private Election election;
+
+    @ManyToOne
+    @JoinColumn(name = "election_id")
+
+    private Election election;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
